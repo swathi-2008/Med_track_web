@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedTrack — Pharmacy Stock and Expiry Manager</title>
+  <meta name="description" content="Pharmacy stock and expiry management system with FEFO sales, batch tracking, dual-risk intelligence, purchase workflows, and role-based access control.">
+  <meta property="og:title" content="MedTrack — Pharmacy Stock and Expiry Manager">
+  <meta property="og:description" content="Pharmacy stock and expiry management system with FEFO sales, batch tracking, dual-risk intelligence, purchase workflows, and role-based access control.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+
+  <!-- Lucide Icons and Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside id="app-sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span style="background: var(--color-accent); color: white; border-radius: 4px; padding: 2px 7px; font-size: 0.9rem;">M</span>
+          <span class="sidebar-brand-text">MedTrack</span>
+        </div>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle" title="Collapse sidebar" aria-label="Toggle sidebar">
+          <i data-lucide="panel-left-close" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Rendered dynamically according to user role in router.js -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-badge" id="user-badge">
+          <div class="user-avatar" id="user-avatar-initials">--</div>
+          <div class="user-info">
+            <div class="user-name" id="user-display-name">Loading...</div>
+            <div class="user-role-label" id="user-role-label">Authenticating</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open mobile menu">
+            <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+          </button>
+          <div class="breadcrumbs" id="breadcrumbs-container">
+            <span>MedTrack</span>
+            <span class="separator">/</span>
+            <span class="current" id="breadcrumb-current">Dashboard</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button id="quick-action-btn" class="btn btn-outline btn-sm" style="display: none;">
+            <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+            <span id="quick-action-label">Action</span>
+          </button>
+          <button id="logout-btn" class="btn btn-outline btn-sm" title="Sign out" aria-label="Sign out">
+            <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+            <span>Sign Out</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="content-canvas" id="main-content" role="main">
+        <!-- Dynamic Page View Loaded Here -->
+        <div style="padding: 3rem 0; text-align: center;">
+          <div class="skeleton" style="height: 120px; max-width: 600px; margin: 0 auto; border-radius: var(--radius-lg);"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Main Application Script -->
+  <script type="module" src="/js/router.js"></script>
+</body>
+</html>

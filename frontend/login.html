@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — MedTrack Pharmacy Manager</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-canvas);
+      padding: 1.5rem;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05);
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .login-logo {
+      width: 40px;
+      height: 40px;
+      background-color: var(--color-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .login-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+    }
+    .login-subtitle {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+    .password-group {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .alert-banner {
+      background-color: var(--color-critical-bg);
+      border: 1px solid var(--color-critical-border);
+      color: var(--color-critical);
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .demo-credentials {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    .demo-credentials code {
+      font-family: var(--font-mono);
+      background-color: #f1f5f9;
+      padding: 0.15rem 0.35rem;
+      border-radius: var(--radius-sm);
+      color: var(--color-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="login-logo">M</div>
+        <div>
+          <div class="login-title">MedTrack</div>
+          <div class="login-subtitle">Pharmacy Stock & Expiry Manager</div>
+        </div>
+      </div>
+
+      <div id="login-alert" class="alert-banner" role="alert"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="username">Username or User ID</label>
+          <input type="text" id="username" name="username" class="form-input" style="width: 100%;" required autocomplete="username" placeholder="e.g. admin or staff">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-group">
+            <input type="password" id="password" name="password" class="form-input" style="width: 100%; padding-right: 3rem;" required autocomplete="current-password" placeholder="••••••••••">
+            <span id="toggle-password-btn" class="toggle-password" role="button" tabindex="0">Show</span>
+          </div>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
+          <span id="btn-text">Sign In</span>
+        </button>
+      </form>
+
+      <div class="demo-credentials">
+        <div style="font-weight: 600; margin-bottom: 0.35rem; color: var(--color-text-main);">Demo Accounts (Development)</div>
+        <div>Admin: <code>admin</code> / <code>Admin12345!</code></div>
+        <div>Manager: <code>manager</code> / <code>Manager123!</code></div>
+        <div>Sales Staff: <code>sales</code> / <code>Sales12345!</code></div>
+        <div>Purchase Staff: <code>purchase</code> / <code>Purchase123!</code></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { api, setCsrfToken } from '/js/api.js';
+
+    // Show / Hide Password Toggle
+    const pwdInput = document.getElementById('password');
+    const toggleBtn = document.getElementById('toggle-password-btn');
+    toggleBtn.addEventListener('click', () => {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        toggleBtn.textContent = 'Hide';
+      } else {
+        pwdInput.type = 'password';
+        toggleBtn.textContent = 'Show';
+      }
+    });
+
+    const alertBox = document.getElementById('login-alert');
+    const form = document.getElementById('login-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      btnText.textContent = 'Signing in...';
+
+      const username = form.username.value.trim();
+      const password = form.password.value;
+
+      try {
+        const result = await api.post('/api/auth/login', { username, password });
+        if (result && result.csrf_token) {
+          setCsrfToken(result.csrf_token);
+        }
+        window.location.href = '/';
+      } catch (err) {
+        alertBox.textContent = err.message || 'Invalid username or password';
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

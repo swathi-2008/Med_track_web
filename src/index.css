@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@layer base {
+  @media print {
+    /* Hide navigation and UI elements */
+    aside, 
+    header, 
+    .no-print,
+    button:not(.print-visible),
+    .bg-slate-900/40, /* Backdrop color */
+    .bg-slate-900/60 {
+      display: none !important;
+    }
+
+    /* Ensure the modal container itself is visible but its backdrop isn't */
+    .fixed.inset-0:has(> .relative.bg-white) {
+      position: relative !important;
+      display: block !important;
+      background: none !important;
+      padding: 0 !important;
+      z-index: auto !important;
+    }
+
+    /* Reset background and layout for printing */
+    body {
+      background: white !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .min-h-screen {
+      min-height: auto !important;
+      height: auto !important;
+    }
+
+    .flex {
+      display: block !important;
+    }
+
+    /* Ensure modal/content takes full width */
+    .max-w-xl, .max-w-lg, .max-w-2xl {
+      max-width: 100% !important;
+      width: 100% !important;
+      position: relative !important;
+      top: 0 !important;
+      left: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+
+    main {
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Table optimization */
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    /* Force text colors to be dark for legibility */
+    .text-slate-500, .text-slate-400 {
+      color: #64748b !important;
+    }
+
+    .text-blue-600, .text-green-600, .text-red-600 {
+      color: black !important;
+      font-weight: bold !important;
+    }
+
+    /* Page breaks */
+    .page-break {
+      page-break-before: always;
+    }
+    
+    /* Ensure charts are visible (might need background-graphics enabled in print settings) */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Remix MedTrack — Pharmacy Stock and Expiry Manager",
+  "description": "Pharmacy stock and expiry management system with FEFO sales, batch tracking, dual-risk intelligence, purchase workflows, and role-based access control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
